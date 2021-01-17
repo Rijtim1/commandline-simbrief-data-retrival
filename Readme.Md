@@ -9,3 +9,7 @@ Make sure you have python installed. Also make sure you have the script added to
 ## Future
 
 I do not intend to add a GUI to this project, however if you deem that is a necessity, then feel free to add it.
+
+## Create An issue if there is more information that you would like to add
+
+We can have a discussion there.
