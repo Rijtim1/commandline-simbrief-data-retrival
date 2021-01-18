@@ -39,4 +39,12 @@ def fetch(SIMBRIEF_USERNAME):
 
 
 if __name__ == "__main__":
-    fetch(input("Enter simbrief username: "))
+    try:
+        with open("username.txt", "r") as username_file:
+            username = username_file.readline()
+            fetch(username)
+    except IOError:
+        with open("username.txt", "w") as username_file:
+            input = input("Enter simbrief name: ")
+            username_file.write(input)
+            fetch(input)
