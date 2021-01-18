@@ -2,13 +2,6 @@ import requests
 import json
 
 FETCH_URL = "http://www.simbrief.com/api/xml.fetcher.php?json=1&username="
-DISPATCH_URL = "http://www.simbrief.com/system/dispatch.php?"
-
-
-class InvalidArgumentException(Exception):
-    # Custom Exception Class
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
 
 
 def fetch(SIMBRIEF_USERNAME):
