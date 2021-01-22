@@ -24,7 +24,7 @@ def fetch(SIMBRIEF_USERNAME):
     print("Planned Altitude: {}".format(parsed["general"]["initial_altitude"]))
     print("\n~~ Weight & Balance ~~")
     print("Fuel: {}".format(parsed["fuel"]["plan_ramp"]))
-    print("Zero Fuel Weight: {}".format(parsed["weights"]["est_zfw"]))
+    print("Payload: {}".format(parsed["weights"]["payload"]))
     print("\n~~ Weather Information ~~")
     print("Weather Origin:\n{}".format(parsed["weather"]["orig_metar"]))
     print("Weather Destination:\n{}".format(parsed["weather"]["dest_metar"]))
