@@ -1,43 +1,49 @@
 import requests
 import json
 
-FETCH_URL = "http://www.simbrief.com/api/xml.fetcher.php?json=1&username="
+def fetch_flight_plan(simbrief_username):
+    api_url = "http://www.simbrief.com/api/xml.fetcher.php"
+    params = {"json": 1, "username": simbrief_username}
+    response = requests.get(api_url, params=params)
+    response.raise_for_status()
+    return response.json()
 
-
-def fetch(SIMBRIEF_USERNAME):
-    # Fetches some basic information from your latest simbrief flight plan.
-    url = FETCH_URL + SIMBRIEF_USERNAME
-    url_data = requests.get(url).content
-    parsed = json.loads(url_data)
+def print_flight_plan_info(flight_plan):
+    origin = flight_plan["origin"]
+    destination = flight_plan["destination"]
+    alternate = flight_plan["alternate"]
+    general = flight_plan["general"]
+    fuel = flight_plan["fuel"]
+    weights = flight_plan["weights"]
+    weather = flight_plan["weather"]
 
     print("~~ Basic Information ~~")
-    print("Origin: {} ({})".format(
-        parsed["origin"]["icao_code"], parsed["origin"]["iata_code"]))
-    print("Planned Runway: {}".format(parsed["origin"]["plan_rwy"]))
-    print("Destination: {} ({})".format(
-        parsed["destination"]["icao_code"], parsed["destination"]["iata_code"]))
-    print("Planned Runway: {}".format(parsed["destination"]["plan_rwy"]))
-    print("Alternate: {} ({})".format(
-        parsed["alternate"]["icao_code"], parsed["alternate"]["iata_code"]))
+    print(f"Origin: {origin['icao_code']} ({origin['iata_code']})")
+    print(f"Planned Runway: {origin['plan_rwy']}")
+    print(f"Destination: {destination['icao_code']} ({destination['iata_code']})")
+    print(f"Planned Runway: {destination['plan_rwy']}")
+    print(f"Alternate: {alternate['icao_code']} ({alternate['iata_code']})")
     print("\n~~ Route Information ~~")
-    print("Route: {}".format(parsed["general"]["route"]))
-    print("Planned Altitude: {}".format(parsed["general"]["initial_altitude"]))
+    print(f"Route: {general['route']}")
+    print(f"Planned Altitude: {general['initial_altitude']}")
     print("\n~~ Weight & Balance ~~")
-    print("Fuel: {}".format(parsed["fuel"]["plan_ramp"]))
-    print("Payload: {}".format(parsed["weights"]["payload"]))
+    print(f"Fuel: {fuel['plan_ramp']}")
+    print(f"Payload: {weights['payload']}")
     print("\n~~ Weather Information ~~")
-    print("Weather Origin:\n{}".format(parsed["weather"]["orig_metar"]))
-    print("Weather Destination:\n{}".format(parsed["weather"]["dest_metar"]))
-    print("Weather Alternate:\n{}".format(parsed["weather"]["altn_metar"]))
+    print(f"Weather Origin:\n{weather['orig_metar']}")
+    print(f"Weather Destination:\n{weather['dest_metar']}")
+    print(f"Weather Alternate:\n{weather['altn_metar']}")
 
-
-if __name__ == "__main__":
+def main():
     try:
         with open("username.txt", "r") as username_file:
-            username = username_file.readline()
-            fetch(username)
+            simbrief_username = username_file.readline().strip()
     except IOError:
         with open("username.txt", "w") as username_file:
-            input = input("Enter simbrief name: ")
-            username_file.write(input)
-            fetch(input)
+            simbrief_username = input("Enter simbrief name: ").strip()
+            username_file.write(simbrief_username)
+    flight_plan = fetch_flight_plan(simbrief_username)
+    print_flight_plan_info(flight_plan)
+
+if __name__ == "__main__":
+    main()
